@@ -1,8 +1,7 @@
-# DocCache
+# doc_cache
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/doc_cache`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+doc_cache allows you to cache raw text fragments to the "cloud" to be retrieved
+asyncronously later by JavaScript.
 
 ## Installation
 
@@ -20,9 +19,34 @@ Or install it yourself as:
 
     $ gem install doc_cache
 
+If you're using Rails, add the following to your asset manifest:
+
+```
+#= require 'doc_cache'
+```
+
 ## Usage
 
-TODO: Write usage instructions here
+In an ERB file:
+
+``` erb
+<%= DocCache.cache ['your_key', @some_object.id] do %>
+  <div>
+    I'm cached! Hello from <%= @some_object.name %>
+  </div>
+<% end %>
+```
+
+If the key has never been accessed before, the server will render it as normal
+and return the outputted HTML. If the cache has been warmed, the server returns
+a `<span>` tag with an identifier. Example:
+
+```
+<span class="doc_cache_fragment" data-fragment-id="eyJhBGci0iJIUz..."></span>
+```
+
+The included JavaScript code will parse every fragment when the document is
+ready and load them asyncronously into the page.
 
 ## Development
 
